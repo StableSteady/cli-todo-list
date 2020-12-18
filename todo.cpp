@@ -79,7 +79,7 @@ int handle_commands(string s, int task_count){
         throw 0;
     }
     else if(s == "help"){
-        cout << "Available commands are:\n!add [task] - to add a new task\n!remove [task number] - to remove the task at specific position\n!quit - to quit the program\n";
+        cout << "Available commands are:\n!add [task] - to add a new task\n!remove [task number] - to remove the task at specific position\n!quit - to quit the program\n!deadline - to add a deadline to a specific task.\n";
         return 0;
     }
     else if(s == "list"){
@@ -101,6 +101,14 @@ int handle_commands(string s, int task_count){
         getline(cin, s);
         s.erase(s.begin());
         todo[index-1].deadline = s;
+        return 0;
+    }
+    else if(s == "edit"){
+        int index;
+        cin >> index;
+        getline(cin, s);
+        s.erase(s.begin());
+        todo[index-1].detail = s;
         return 0;
     }
     write_log(task_count);
