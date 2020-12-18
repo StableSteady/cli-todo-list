@@ -2,6 +2,7 @@
 #include <string>
 #include <vector>
 #include <fstream>
+#include <limits>
 
 using namespace std;
 
@@ -37,6 +38,7 @@ int read_log(void)
     else{
         cout << "No log file detected.\nCreating new one...\n";
         ofstream file("todo_log.txt");
+        return -1;
     }
     log.close();
     return task_count;
@@ -53,54 +55,72 @@ void write_log(int task_count)
     log.close();
 }
 
+int handle_commands(string s, int task_count){
+    if(s == "add"){
+        getline(cin, s);
+        s.erase(s.begin());
+        todo.push_back(task(s));
+        return 1;
+    }
+    else if(s == "remove"){
+        int index;
+        cin >> index;
+        if(index > todo.size()){
+            cout << "Attempt to remove a task not present! Please enter a valid number to remove.\n";
+            cin.clear();
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+            return 0;
+        }
+        todo.erase(todo.begin() + index - 1);
+        return -1;
+    }
+    else if(s == "quit"){
+        write_log(task_count);
+        throw 0;
+    }
+    else if(s == "help"){
+        cout << "Available commands are:\n!add [task] - to add a new task\n!remove [task number] - to remove the task at specific position\n!quit - to quit the program\n";
+        return 0;
+    }
+    else if(s == "list"){
+        for(int i = 0; i < todo.size(); ++i){
+            cout << i+1 << ") " << todo[i].detail << '\n';
+            if(todo[i].duedate == true) cout << "Deadline: " << todo[i].deadline << '\n';
+        }
+        return 0;
+    }    
+    else if(s == "deadline"){
+        int index;
+        cin >> index;
+        if(index > todo.size()){
+            cout << "Attempt to add deadline to a task not present! Please enter a valid number.\n";
+            cin.clear();
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+            return 0;
+        }
+        getline(cin, s);
+        s.erase(s.begin());
+        todo[index-1].deadline = s;
+        return 0;
+    }
+    write_log(task_count);
+    throw 3;
+}
+
 int read_input(int task_count)
 {
     char c;
     cin >> c;
     if(c != '!'){
         cout << "Invalid command!\nEnter !help for a list of valid commands.\n";
-        cin.sync();
+        cin.clear();
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
         return 0;
     }
     string command;
     string temp;
     cin >> command;
-    if(command == "add"){
-        getline(cin, temp);
-        temp.erase(temp.begin());
-        todo.push_back(task(temp));
-        return 1;
-    }
-    else if(command == "remove"){
-        int index;
-        cin >> index;
-        if(index > todo.size()){
-            cout << "Attempt to remove a task not present! Please enter a valid number to remove.\n";
-            cin.sync();
-            return 0;
-        }
-        todo.erase(todo.begin() + index - 1);
-        return -1;
-    }
-    else if(command == "quit"){
-        write_log(task_count);
-        throw 0;
-    }
-    else if(command == "help"){
-        cout << "Available commands are:\n!add [task] - to add a new task\n!remove [task number] - to remove the task at specific position\n!quit - to quit the program\n";
-        return 0;
-    }
-    else if(command == "list"){
-        for(int i = 0; i < todo.size(); ++i){
-            cout << i+1 << ')' << todo[i].detail << '\n';
-            if(todo[i].duedate == true) cout << "Deadline: " << todo[i].deadline << '\n';
-        }
-        return 0;
-    }
-    else {
-        write_log(task_count);
-        throw 3;
-    }
+    return handle_commands(command, task_count);
 }
 
 int main()
