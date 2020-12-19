@@ -16,4 +16,4 @@ A todo list program with a command line interface.
 * ~~Ability to edit tasks.~~ done!
 * ~~Cleaned up code.~~ done!
 * Proper comments.
-* Indication of successful command usage.
+* ~~Indication of successful command usage.~~ done!
