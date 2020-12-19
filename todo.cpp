@@ -4,6 +4,10 @@
 #include <fstream>
 #include <limits>
 
+#define quit 1
+#define invalid_command 2
+#define absent -1
+
 using namespace std;
 
 class task{
@@ -18,15 +22,48 @@ class task{
 
 vector<task> todo;
 
+int read_log(void);
+
+void write_log(int task_count);
+
+int handle_commands(string s, int task_count);
+
+int read_input(int task_count);
+
+int main()
+try {
+    int task_count = read_log();
+    if(task_count == absent){
+        cout << "Looks like you are using the program for the first time.\nEnter !help to see available commands.\n";
+        task_count = 0;
+    }
+    else cout << "Welcome to the todo planner.\nCurrently you have " << task_count << " task(s) left.\nEnter any valid command to continue.\n";
+    while(true){
+        task_count += read_input(task_count);
+    }
+
+}
+
+catch(int i){
+    if(i == 0) cout << "Exiting program...\n";
+    else if(i == 3) cout << "Invalid command.\nExiting...\n";
+}
+
+catch (const std::invalid_argument& ia){
+	  std::cerr << "Invalid argument: " << ia.what() << '\n';
+}
+
 int read_log(void)
 {
     ifstream log;
     int task_count = 0;
+    
     log.open("todo_log.txt");
     if(log.is_open()){
         string temp, temp2;
         getline(log, temp);
-        if(temp == "") return -1;
+       
+       if(temp == "") return absent;
         task_count = stoi(temp);
         for(int i = 0; i < task_count; ++i){
             getline(log, temp);
@@ -76,7 +113,7 @@ int handle_commands(string s, int task_count){
     }
     else if(s == "quit"){
         write_log(task_count);
-        throw 0;
+        throw quit;
     }
     else if(s == "help"){
         cout << "Available commands are:\n!add [task] - to add a new task\n!remove [task number] - to remove the task at specific position\n!quit - to quit the program\n!deadline - to add a deadline to a specific task.\n";
@@ -112,7 +149,7 @@ int handle_commands(string s, int task_count){
         return 0;
     }
     write_log(task_count);
-    throw 3;
+    throw invalid_command;
 }
 
 int read_input(int task_count)
@@ -129,25 +166,4 @@ int read_input(int task_count)
     string temp;
     cin >> command;
     return handle_commands(command, task_count);
-}
-
-int main()
-try {
-    int task_count = read_log();
-    int additions = 0;
-    if(task_count == -1){
-        cout << "Looks like you are using the program for the first time.\nEnter !help to see available commands.\n";
-        task_count = 0;
-    }
-    else cout << "Welcome to the todo planner.\nCurrently you have " << task_count << " task(s) left.\nEnter any valid command to continue.\n";
-    while(true){
-        task_count += read_input(task_count);
-    }
-
-}
-
-catch(int i){
-    if(i == 0) cout << "Exiting program...\n";
-    else if(i == 3) cout << "Invalid command.\nExiting...\n";
-    else cout << "Can't open log file!\nExiting...\n";
 }
