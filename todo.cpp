@@ -45,8 +45,8 @@ try {
 }
 
 catch(int i){
-    if(i == 0) cout << "Exiting program...\n";
-    else if(i == 3) cout << "Invalid command.\nExiting...\n";
+    if(i == quit) cout << "Exiting program...\n";
+    else if(i == invalid_command) cout << "Invalid command.\nExiting...\n";
 }
 
 catch (const std::invalid_argument& ia){
@@ -97,6 +97,7 @@ int handle_commands(string s, int task_count){
         getline(cin, s);
         s.erase(s.begin());
         todo.push_back(task(s));
+        cout << "Task added successfully.\n";
         return 1;
     }
     else if(s == "remove"){
@@ -109,6 +110,7 @@ int handle_commands(string s, int task_count){
             return 0;
         }
         todo.erase(todo.begin() + index - 1);
+        cout << "Removed task " << index << " successfully.\n";
         return -1;
     }
     else if(s == "quit"){
@@ -120,9 +122,10 @@ int handle_commands(string s, int task_count){
         return 0;
     }
     else if(s == "list"){
+        cout << "You have " << task_count << " tasks stored.\n";
         for(int i = 0; i < todo.size(); ++i){
             cout << i+1 << ") " << todo[i].detail << '\n';
-            if(todo[i].duedate == true) cout << "Deadline: " << todo[i].deadline << '\n';
+            if(todo[i].duedate == true) cout << "Deadline: " << todo[i].deadline << "\n";
         }
         return 0;
     }    
@@ -138,6 +141,8 @@ int handle_commands(string s, int task_count){
         getline(cin, s);
         s.erase(s.begin());
         todo[index-1].deadline = s;
+        todo[index-1].duedate = true;
+        cout << "Added deadline to task " << index << " successfully!\n";
         return 0;
     }
     else if(s == "edit"){
@@ -146,6 +151,7 @@ int handle_commands(string s, int task_count){
         getline(cin, s);
         s.erase(s.begin());
         todo[index-1].detail = s;
+        cout << "Successfully edited task " << index << "\n";
         return 0;
     }
     write_log(task_count);
