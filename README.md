@@ -14,6 +14,6 @@ A todo list program with a command line interface.
 * Improved `!help` command.
 * ~~Way to add deadlines to tasks.~~ done!
 * ~~Ability to edit tasks.~~ done!
-* Cleaned up code.
+* ~~Cleaned up code.~~ done!
 * Proper comments.
 * Indication of successful command usage.
