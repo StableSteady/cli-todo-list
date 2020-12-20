@@ -30,6 +30,8 @@ int handle_commands(string s, int task_count);
 
 int read_input(int task_count);
 
+void help(void);
+
 int main()
 try {
     int task_count = read_log();
@@ -118,7 +120,7 @@ int handle_commands(string s, int task_count){
         throw quit;
     }
     else if(s == "help"){
-        cout << "Available commands are:\n!add [task] - to add a new task\n!remove [task number] - to remove the task at specific position\n!quit - to quit the program\n!deadline - to add a deadline to a specific task.\n";
+        help();
         return 0;
     }
     else if(s == "list"){
@@ -172,4 +174,31 @@ int read_input(int task_count)
     string temp;
     cin >> command;
     return handle_commands(command, task_count);
+}
+
+void help(void)
+{
+    string argument;
+    getline(cin, argument);
+    if(argument == ""){
+        cout  << "Welcome to the help command.\nYou can enter !help [!command] without the brackets to know about a command or !help -all to view all available commands.\n";
+    }
+    else{
+        argument.erase(argument.begin());
+        if(argument == "-all"){
+            cout << "The following commands are available for use.\n";
+            cout << "`!help` to get the list of available commands.\n";
+            cout << "`!add [task]` to add a new task to do.\n";
+            cout << "`!list` to list the current tasks with their task numbers.\n";
+            cout << "`!remove [task number]` to remove a specific task.\n";
+            cout << "`!deadline [task number]` to add a deadline to a specific task.\n";
+            cout << "`!edit [task number] [new task]` to edit a task description.\n";
+        }
+        else if(argument == "!add") cout << "`!add [task]` to add a new task to do.\n";
+        else if(argument == "!list") cout << "`!list` to list the current tasks with their task numbers.\n";
+        else if(argument == "!remove") cout << "`!remove [task number]` to remove a specific task.\n";
+        else if(argument == "!deadline") cout << "`!deadline [task number]` to add a deadline to a specific task.\n";
+        else if(argument == "!edit") cout << "`!edit [task number] [new task]` to edit a task description.\n";
+        else cout << "Invalid argument!\n";
+    }
 }
