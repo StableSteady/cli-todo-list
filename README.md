@@ -11,7 +11,7 @@ A todo list program with a command line interface.
 * `!edit [task number] [new task]` to edit a task description.
 
 # Features to add later
-* Improved `!help` command.
+* ~~Improved `!help` command.~~ done!
 * ~~Way to add deadlines to tasks.~~ done!
 * ~~Ability to edit tasks.~~ done!
 * ~~Cleaned up code.~~ done!
